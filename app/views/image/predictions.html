@@ -1,0 +1,121 @@
+<div class="page-header">
+	<h2>
+		<span class="fa-stack">
+<i class="fa fa-picture-o"></i>
+</span>Sphere Image Classification
+	</h2>
+</div>
+
+<div>
+	<ul class="nav nav-tabs">
+		<li><a ng-href="#!/image/search">Search/Upload Images</a></li>
+		<li><a ng-href="#!/image/training">Train a Model</a></li>
+		<li><a ng-href="#!/image/validation">View Models</a></li>
+		<li class="active"><a ng-href="#!/image/predictions">Predictions</a></li>
+	</ul>
+</div>
+<div class="row">
+	<!----------------------------------------------- Loading Panel ------------------------------------------>
+	<div class="col-xs-4 col-lg-4 col-xs-offset-4 mt-4">
+		<div class="alert alert-info" uib-alert role="alert" ng-show="loading">
+			<p>
+				<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i> Loading…
+			</p>
+		</div>
+	</div>
+	<!----------------------------------------------- Loading Panel ------------------------------------------>
+
+	<div class="col-md-12">
+
+		<!----------------------------------------------- Predictions Start ------------------------------------------------->
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				Predictions
+			</div>
+			<div class="panel-body">
+
+
+				<!-------------------------------------------- Select Model ------------------------------------------------>
+				<div class="m-4 row" >
+					<div class="form-group">
+						<label for="modelList">Select a model to start training</label>
+						<select class="form-control" id="modelList" ng-model="selectedModel"
+										ng-options="models as models.name for models in availableModelsPrediction| orderBy:'name'">
+						</select>
+					</div>
+
+				</div>
+				<!-------------------------------------------- Select Model ------------------------------------------------>
+
+				<label class="btn btn-primary btn-lg btn-file-sphere m-4" ng-show="selectedModel">
+					{{predictionFiles.length === undefined ? "Select Files": predictionFiles.length + " files selected"}}
+					<input type="file" name="file" accept="image/*" ng-file-model="predictionFiles" multiple
+								 style="display: none"/>
+				</label>
+
+
+				<button class="btn btn-warning btn-lg m-4 pull-right" ng-show="predictionFiles.length > 0"
+								ng-click="predictOnSelectedImages(selectedModel)">Predict
+				</button>
+				<button class="btn btn-danger btn-lg m-4 pull-left" ng-show="predictionResults.length > 0"
+								ng-click="clearAll()">Clear All
+				</button>
+
+
+			</div>
+		</div>
+		<!----------------------------------------------- Predictions Start ------------------------------------------------->
+		<div class="panel panel-success mt-4" ng-show="predictionResults.length > 0">
+			<div class="panel-heading">
+				Prediction results
+			</div>
+			<div class="panel-body">
+				<button class="btn btn-lg btn-success" ng-click="downloadAsCSV()"><i class="fa fa-file-excel" aria-hidden="true"></i>  Download predictions as CSV</button>
+				<table class="table table-responsive table-hover">
+					<thead>
+					<tr>
+						<th>Nr</th>
+						<th>Image Name</th>
+						<th>Prediction 1</th>
+						<th>Prediction 2</th>
+						<th>Prediction 3</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr ng-repeat="predictionImage in predictionResults track by $index">
+						<td>{{$index + 1}}</td>
+						<td>
+							<p><img ngf-src="returnImage(predictionImage.filename)" class="thumbnail crop"></p>
+						</td>
+						<td>
+							<div class="row">
+								<p><strong> Class: </strong> {{predictionImage.predictions[0].class}}</p>
+								<p><strong> Description: </strong> {{predictionImage.predictions[0].description}}</p>
+								<p><strong> Probability: </strong> {{predictionImage.predictions[0].probability}}</p>
+							</div>
+						</td>
+						<td>
+							<div class="row">
+								<p><strong> Class: </strong> {{predictionImage.predictions[1].class}}</p>
+								<p><strong> Description: </strong> {{predictionImage.predictions[1].description}}</p>
+								<p><strong> Probability: </strong> {{predictionImage.predictions[1].probability}}</p>
+							</div>
+
+						</td>
+						<td>
+							<div class="row">
+								<p><strong> Class: </strong> {{predictionImage.predictions[2].class}}</p>
+								<p><strong> Description: </strong> {{predictionImage.predictions[2].description}}</p>
+								<p><strong> Probability: </strong> {{predictionImage.predictions[2].probability}}</p>
+							</div>
+						</td>
+
+
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+

@@ -1,0 +1,177 @@
+<div class="page-header">
+	<h2>
+		<span class="fa-stack">
+<i class="fa fa-picture-o"></i>
+</span>Sphere Image Classification
+	</h2>
+</div>
+
+<!----------------------------------------------- Loading Panel ------------------------------------------>
+<div class="col-xs-4 col-lg-4 col-xs-offset-4">
+	<div class="alert alert-info" uib-alert role="alert" ng-show="loading">
+		<p>
+			<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i> Loading…
+		</p>
+	</div>
+</div>
+<!----------------------------------------------- Loading Panel ------------------------------------------>
+
+<div class="col-xs-12">
+	<ul class="nav nav-tabs">
+		<li class="active"><a ng-href="#!/image/search">Search/Upload Images</a></li>
+		<li><a ng-href="#!/image/training">Train a Model</a></li>
+		<li><a ng-href="#!/image/validation">View Models</a></li>
+		<li><a ng-href="#!/image/predictions">Predictions</a></li>
+	</ul>
+</div>
+<div class="row">
+
+	<div class="col-md-12">
+		<!--------------------------------------- Radio Buttons for museum -------------------------------->
+
+		<ul class="nav nav-tabs m-3">
+			<li ng-class="{active: bingvaradioButtonClassDetection('bing')}"><a ng-href="#!/image/search" class="active"><strong>
+				Search Bing/Upload form PC</strong></a></li>
+			<li ng-class="{active: bingvaradioButtonClassDetection('va')}"><a ng-href="#!/image/museumsearch"
+			><strong>Search V&A Museum</strong></a>
+			</li>
+		</ul>
+		<!--------------------------------------- Radio Buttons for museum -------------------------------->
+
+
+		<!----------------------------------------------- Main Panel ------------------------------------------>
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				Enter keywords to search for the images.
+			</div>
+			<div class="panel-body">
+				<!--------------------------------------- Radio Buttons -------------------------------->
+				<div class="form-group row m-4">
+					<label for="search" class=""></label>
+					<div class="col-sm-7 col-md-7">
+						<div class="input-group">
+							<div class="btn-group">
+								<a class="btn" data-toggle="search" data-title="Search"
+									 ng-class="{'btn-primary':radioButtonClassDetection('search'), 'btn-default':radioButtonClassDetection('upload')}"
+									 ng-click="searchingMode = true">Search Bing for Images</a>
+								<a class="btn" data-toggle="search" data-title="Upload"
+									 ng-class="{'btn-primary':radioButtonClassDetection('upload'), 'btn-default':radioButtonClassDetection('search')}"
+									 ng-click="searchingMode = false">Upload from PC</a>
+							</div>
+							<input type="hidden" name="search" id="search">
+						</div>
+					</div>
+				</div>
+				<!--------------------------------------- Radio Buttons -------------------------------->
+				<!----------------------------------------------- Search Form ------------------------------------------>
+				<form class="row m-1" ng-submit="getSearchResults(numberOfImages, apiKey)"
+							ng-show="searchingMode">
+					<div class="form-horizontal">
+						<label for="searchText">Enter an item to search (Use comma "," to separate multiple keywords)</label>
+						<input type="text" class="form-control col-xs-12" ng-model="searchQuery" id="searchText"
+									 title="Search Query"
+									 placeholder="Search Query" autofocus="" required/>
+					</div>
+
+					<div class="form-inline ">
+						<label for="apiKey">Enter a Bing Search API Key if available (We use a free trial with limited
+							queries)</label>
+						<input type="text" class="form-control m-3" ng-model="apiKey" id="apiKey" title="Bing API key"
+									 placeholder="API Key"/>
+
+
+						<label for="numberOfImages">Enter number to images to search. Default : 100</label>
+						<input type="number" class="form-control m-3" ng-model="numberOfImages" id="numberOfImages"
+									 title="Number of images to download"
+									 placeholder="Enter number to images to search. Default : 100"/>
+					</div>
+
+
+					<button class="btn btn-success btn-lg m-2 pull-right" role="button" type="submit"><i class="fa fa-search"
+																																															 aria-hidden="true"></i>
+						&nbsp;Search
+					</button>
+				</form>
+				<!----------------------------------------------- Search Form ------------------------------------------>
+				<!----------------------------------------------- Upload Form ------------------------------------------>
+				<form ng-submit="uploadImages(uploadClassName)" ng-show="!searchingMode" class="row m-1">
+					<label class="btn btn-primary btn-lg btn-file-sphere m-3">
+						{{fileForUpload.length === undefined ? "Select Files": fileForUpload.length + " files selected"}}
+						<input type="file" name="file" accept="image/*" ng-file-model="fileForUpload" multiple
+									 style="display: none"/>
+					</label>
+					<div class="form-horizontal m-4">
+
+
+						<label for="uploadClassName">Enter a class name</label>
+						<input type="text" class="form-control m-3" ng-model="uploadClassName" id="uploadClassName"
+									 title="Class Name"
+									 placeholder="Class Name" autofocus="" required/>
+					</div>
+
+					<button class="btn btn-lg btn-success m-3 pull-right">
+						Upload
+					</button>
+				</form>
+				<!----------------------------------------------- Upload Form ------------------------------------------>
+				<div class="row col-xs-12 pb-1" ng-show="searchResults.length > 0">
+					<hr/>
+					<div class="col-xs-6">
+						<button class="btn btn-primary col-xs-offset-2 col-xs-12 col-sm-offset-6 col-sm-6 col-md-6" type="button"
+										ng-click="sendData()"> Save Dataset
+						</button>
+					</div>
+					<div class="col-xs-6">
+						<button class="btn btn-warning  col-xs-12 col-sm-offset-1 col-sm-6 col-md-6" type="button"
+										ng-click="clear()"> Clear All
+						</button>
+					</div>
+
+
+				</div>
+			</div>
+
+		</div>
+		<!----------------------------------------------- Main Panel ------------------------------------------>
+
+		<!----------------------------------------------- Search Results ------------------------------------------>
+		<div class="panel panel-danger" ng-repeat="results in searchResults track by $id(results)">
+			<div class="panel-heading">
+
+				<a data-toggle="collapse" data-target="#{{results.searchTerm | removeSpaces}}">{{results.searchTerm}}</a>
+
+			</div>
+
+			<div class="panel-body collapse" id="{{results.searchTerm | removeSpaces}}">
+				<div class="row m-3">
+
+
+					<button class="btn btn-primary m-2" ng-show="currentSelectionForEditing.searchTerm == results.searchTerm"
+									ng-click="deleteSelectedImages()">Remove Selected
+						Images
+					</button>
+					<label class="radio-inline pull-left m-2"><input type="radio" name="removeRadio"
+																													 ng-click="startImageRemovingMode(results.searchTerm)"
+																													 ng-checked="currentSelectionForEditing.searchTerm == results.searchTerm">Editing
+						Mode</label>
+				</div>
+				<div class="row list-group">
+
+					<div class="pre-scrollable">
+						<div ng-repeat="obj in results.images track by $index" class="pre-scrollable col-xs-6 col-sm-3 col-lg-2">
+							<div class="item">
+								<div class="thumbnail crop" ng-click="selectedImageForRemoval($index, results.searchTerm)"
+										 ng-class=" checkImageSelected(results.searchTerm, $index) ? 'thumbnail-selected' : 'thumbnail-unselected'">
+									<img class="group list-group-image" src="{{obj.thumbnailUrl}}"/>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+		<!----------------------------------------------- Search Results ------------------------------------------>
+	</div>
+</div>

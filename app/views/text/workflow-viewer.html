@@ -1,0 +1,142 @@
+<div class="page-header">
+	<h2>
+		<span class="fa-stack">
+			<i class="fa fa-file-text-o"></i>
+		</span>Sphere Text Classification
+	</h2>
+</div>
+<div>
+	<ul class="nav nav-tabs">
+		<li><a ng-href="#!/text/datasetcreation"><strong>Add/View Gold Standards</strong></a></li>
+		<li><a ng-href="#!/text/lexicons"><strong>Build/View Feature Extractor</strong></a></li>
+		<li><a ng-href="#!/text/workflow-generator"><strong>Create Classifier workflow</strong></a></li>
+		<li class="active"><a ng-href="#!/text/workflow-viewer"><strong>Search/View Classifiers</strong></a></li>
+		<li><a ng-href="#!/text/workflowannotator"><strong>Data Annotation</strong></a></li>
+	</ul>
+
+
+	<div class="row mt-4" id="viewWorkflowTab">
+		<div class="col-md-12">
+			<!-------------------------------------------- Search Workflow Panel ------------------------------------------------>
+			<div class="panel panel-primary">
+
+				<div class="panel-heading">
+					Search for existing workflows
+				</div>
+				<div class="panel-body">
+
+					<!-------------------------------------------- Loading ------------------------------------------------>
+					<div class="row">
+
+						<div class="col-xs-4 col-lg-4 col-xs-offset-4">
+							<div class="alert alert-info" uib-alert role="alert" ng-show="loading">
+								<p>
+									<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i> Loading…
+								</p>
+							</div>
+						</div>
+					</div>
+					<!-------------------------------------------- Loading ------------------------------------------------>
+
+
+					<!-------------------------------------------- Search Workflow ------------------------------------------------>
+					<div class="row">
+						<div class="col-sm-8 col-xs-12 mt-2">
+							<input type="text" class="form-control m-1" ng-model="searchString" id="searchString"
+										 title="Search Workflow"
+										 placeholder="Search Workflow">
+						</div>
+						<div class="col-xs-offset-4 col-xs-6 col-sm-offset-0 col-sm-4 mt-2 pl-2">
+							<button class="btn btn-primary m-1"
+											ng-click="searchString.length > 0 ? searchWorkflow(searchString) : getAllWorkflows()">
+								{{searchString.length > 0 ? "Search for this workflow" : "View all Workflows"}}
+							</button>
+							<!--button class="btn btn-primary m-1"> View All Workflows</button-->
+
+						</div>
+
+						<div class="m-2 col-xs-12" ng-show="searchResultsRecieved">
+
+							<button ng-repeat="item in searchResults track by $index " class="btn btn-primary m-2">{{item}}</button>
+							<button class="btn btn-primary m-2 " ng-click='addNode(modalData, item)'>Add items to workflow options
+							</button>
+
+						</div>
+
+					</div>
+					<!-------------------------------------------- Search Workflow ------------------------------------------------>
+
+
+				</div>
+			</div>
+			<!-------------------------------------------- Search Workflow Panel ------------------------------------------------>
+
+			<!-------------------------------------------- View Workflow Panel ------------------------------------------------>
+			<div class="panel panel-primary" ng-show="viewAllWorkflows">
+				<div class="panel-heading">
+					Available Workflows
+				</div>
+				<div class="panel-body">
+					<!-------------------------------------------- Cytoscape ------------------------------------------------>
+					<div ng-show="showWorkflow">
+						<button class="btn btn-primary m-2" ng-click="showWorkflow = !showWorkflow">Hide Workflow</button>
+						<div class="workflow col-xs-12" id="workflowGraphViewCreation"></div>
+					</div>
+					<!-------------------------------------------- Cytoscape ------------------------------------------------>
+
+					<!-------------------------------------------- Data Table ------------------------------------------------>
+					<table class="table table-responsive table-hover">
+						<thead>
+						<tr>
+							<th>Nr</th>
+							<th>Workflow Name</th>
+							<th>Training</th>
+							<th>Validation</th>
+							<th>Validation Results</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr ng-repeat="items in returnedWorkflows| filter:searchString | orderBy: 'name' track by $index">
+							<td><p class="m-1 "><strong>{{$index + 1}} </strong></p></td>
+							<td>
+								<p class="m-1">{{items.name}}</p>
+							</td>
+							<td>
+								<button class="btn m-1" ng-class="items.status == 'trained' ? 'btn-primary':'disabled'"
+												ng-click="viewSelectedWorkflow(items.workflow)">{{items.status == 'trained' ?
+									'View Workflow':'Training...'}}
+								</button>
+								<button class="btn btn-primary m-1" ng-click="addToWorkflowLibrary(items)"
+												ng-show="items.status == 'trained'"> Add to classifier library
+								</button>
+							</td>
+							<td>
+
+								<input ng-show="items.status == 'trained'" class="form-control" placeholder="Enter text to start prediction"
+											 ng-model="predictionText" id="predictionText" title="Prediction Text"/>
+								<button class="btn m-1" ng-click="startPrediction(items.name, predictionText)"
+												ng-class="items.status == 'trained' ? 'btn-primary':'disabled'">
+									{{items.status == 'trained' ? 'Predict':'Training...'}}
+								</button>
+
+							</td>
+							<td>
+								<button class="btn m-1" ng-class="items.status == 'trained' ? 'btn-primary':'disabled'">{{items.status
+									==
+									'trained' ? 'Acc : ' + (items.scores.accuracy * 100).toFixed(3) + '% F1 Score: ' +
+									(items.scores.f1_score * 100).toFixed(3) + '%' :'Training...' }}
+								</button>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+					<!-------------------------------------------- Data Table ------------------------------------------------>
+				</div>
+			</div>
+			<!-------------------------------------------- View Workflow Panel ------------------------------------------------>
+
+
+		</div>
+	</div>
+
+</div>

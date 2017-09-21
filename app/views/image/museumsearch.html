@@ -1,0 +1,217 @@
+<div class="page-header">
+	<h2>
+		<span class="fa-stack">
+<i class="fa fa-picture-o"></i>
+</span>Sphere Image Classification
+	</h2>
+</div>
+
+<!----------------------------------------------- Loading Panel ------------------------------------------>
+<div class="col-xs-4 col-lg-4 col-xs-offset-4">
+	<div class="alert alert-info" uib-alert role="alert" ng-show="loading">
+		<p>
+			<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i> Loading…
+		</p>
+	</div>
+</div>
+<!----------------------------------------------- Loading Panel ------------------------------------------>
+
+
+<div class="col-xs-12">
+	<ul class="nav nav-tabs">
+		<li class="active"><a ng-href="#!/image/search">Search/Upload Images</a></li>
+		<li><a ng-href="#!/image/training">Train a Model</a></li>
+		<li><a ng-href="#!/image/validation">View Models</a></li>
+		<li><a ng-href="#!/image/predictions">Predictions</a></li>
+	</ul>
+</div>
+<div class="row">
+
+	<div class="col-md-12">
+		<!--------------------------------------- Radio Buttons for museum -------------------------------->
+		<ul class="nav nav-tabs m-3">
+			<li ng-class="{active: bingvaradioButtonClassDetection('bing')}"><a ng-href="#!/image/search" class="active"><strong>
+				Search Bing/Upload form PC</strong></a></li>
+			<li ng-class="{active: bingvaradioButtonClassDetection('va')}"><a ng-href="#!/image/museumsearch"
+			><strong>Search V&A Museum</strong></a>
+			</li>
+		</ul>
+		<!--------------------------------------- Radio Buttons for museum -------------------------------->
+
+
+		<!----------------------------------------------- Main Panel ------------------------------------------>
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				Enter keywords to search for the images.
+			</div>
+			<div class="panel-body">
+				<h3> Search images from Victoria and Albert Museum</h3>
+				<form id="startTrainingForm"
+							ng-submit="searchImages(generalQuery, objectName ,nameSearch ,placeSearch ,materialSearch ,dateSearch, numberImages)">
+					<div class="form-horizontal row m-3">
+						<label for="generalQuery" class="control-label m-1">General Query</label>
+						<input id="generalQuery" name="generalQuery" ng-model="generalQuery" class="form-control"
+									 placeholder="General Query (Not compulsory when using any other fields below)"
+									 ng-required="objectName === undefined && nameSearch === undefined && placeSearch === undefined && materialSearch === undefined && dateSearch === undefined">
+					</div>
+					<div class="form-inline row m-3">
+						<!----------------------------------------------- Object Name ------------------------------------------>
+						<label class="checkbox m-4">
+							<input type="checkbox" ng-model="showObjectNameSearch" ng-checked="false"
+										 ng-click="showObjectNameSearch!=true; objectName = undefined"> Enter a custom Object Name
+
+						</label>
+						<input id="objectName" name="objectName" ng-model="objectName" class="form-control"
+									 placeholder="Object Name" ng-show="showObjectNameSearch">
+
+						<!----------------------------------------------- Object Name ------------------------------------------>
+						<!----------------------------------------------- Artist Name ------------------------------------------>
+						<label class="checkbox m-4">
+							<input type="checkbox" ng-model="showNameSearch" ng-checked="false"
+										 ng-click="showNameSearch!=true; nameSearch = undefined"> Enter a Artist/Maker Name
+
+						</label>
+						<input id="nameSearch" name="nameSearch" ng-model="nameSearch" class="form-control"
+									 placeholder="Artist/Maker Name" ng-show="showNameSearch">
+						<!----------------------------------------------- Artist Name ------------------------------------------>
+						<!----------------------------------------------- Place Name ------------------------------------------>
+						<label class="checkbox m-4">
+							<input type="checkbox" ng-model="showPlaceSearch" ng-checked="false"
+										 ng-click="showPlaceSearch!=true; placeSearch = undefined"> Enter a Place Name
+
+						</label>
+						<input id="placeSearch" name="placeSearch" ng-model="placeSearch" class="form-control"
+									 placeholder="Place Name" ng-show="showPlaceSearch">
+						<!----------------------------------------------- Place Name ------------------------------------------>
+						<!----------------------------------------------- Material Name ------------------------------------------>
+						<label class="checkbox m-4">
+							<input type="checkbox" ng-model="showMaterialSearch" ng-checked="false"
+										 ng-click="showMaterialSearch!=true; materialSearch = undefined"> Enter a Material Name
+
+						</label>
+						<input id="materialSearch" name="materialSearch" ng-model="materialSearch" class="form-control"
+									 placeholder="Material Name" ng-show="showMaterialSearch">
+						<!----------------------------------------------- Material Name ------------------------------------------>
+						<!----------------------------------------------- Date Filter ------------------------------------------>
+						<label class="checkbox m-4">
+							<input type="checkbox" ng-model="showDateFilter" ng-checked="false"
+										 ng-click="showDateFilter!=true; dateSearch = undefined"> Add a date filter
+
+						</label>
+						<div class="input-group m-4" ng-show="showDateFilter">
+							<input id="dateSearch" name="dateSearch" ng-model="dateSearch" class="form-control"
+										 placeholder="Enter an year">
+							<div class="dropdown input-group-btn">
+								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">{{datePeriod}}
+									<span class="caret"></span></button>
+								<ul class="dropdown-menu">
+									<li><a ng-click="datePeriod = 'After'" ng-show="datePeriod != 'After'">After</a></li>
+									<li><a ng-click="datePeriod = 'Before'" ng-show="datePeriod != 'Before'">Before</a></li>
+								</ul>
+							</div>
+
+						</div>
+						<!----------------------------------------------- Date Filter ------------------------------------------>
+						<!----------------------------------------------- No of Results ------------------------------------------>
+						<label class="checkbox m-4" for="numberImages">
+							Number of images (affects API use) (Default: 450)(always in multiples of 45)
+						</label>
+						<input id="numberImages" name="numberImages" ng-model="numberImages" class="form-control"
+									 placeholder="100" type="number">
+						<!----------------------------------------------- No of Results ------------------------------------------>
+					</div>
+
+					<button class="btn btn-success btn-lg m-2 pull-right" role="button" type="submit"><i class="fa fa-search"
+																																															 aria-hidden="true"></i>
+						&nbsp;Search
+					</button>
+
+				</form>
+				<button class="btn btn-success btn-lg m-2 pull-left" ng-click="downloadAsZip()"
+								ng-show="searchResults.length > 0"><i class="fa fa-file-archive-o"
+																											aria-hidden="true"></i>
+					&nbsp;Download as .zip file
+				</button>
+				<button class="btn btn-danger btn-lg m-2 pull-right" ng-click="clear()"
+								ng-show="searchResults.length > 0"><i class="fa fa-eraser"
+																											aria-hidden="true"></i>
+					&nbsp;Clear All
+				</button>
+
+				<form ng-submit="sendToServer(classificationClass)" class="pull-left m-2 col-xs-4"
+							ng-show="searchResults.length > 0">
+					<div class="input-group">
+						<input id="classificationClass" name="classificationClass" ng-model="classificationClass"
+									 class="form-control input-lg"
+									 placeholder="Classification Class" required>
+						<span class="input-group-btn">
+						<button class="btn btn-success btn-lg" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i>
+ 																		&nbsp; Save on Server</button>
+						</span>
+
+
+					</div>
+
+				</form>
+			</div>
+
+		</div>
+		<!----------------------------------------------- Main Panel ------------------------------------------>
+		<!----------------------------------------------- Search Results ------------------------------------------>
+		<div class="panel panel-danger" ng-show="searchResults.length > 0">
+			<div class="panel-heading">
+
+				Search Results
+
+			</div>
+
+			<div class="panel-body" id="searchResults">
+				<div class="row">
+					<div class="row m-3">
+						<button class="btn btn-primary m-4" ng-show="imageObjectsToRemove.length > 0"
+										ng-click="deleteSelectedVAImages()">Remove Selected
+							Images
+						</button>
+						<label class="radio-inline pull-left m-2"><input type="radio" name="removeRadio"
+																														 ng-click="editingModeEnabled = true"
+																														 ng-checked="editingModeEnabled">Editing
+							Mode</label>
+					</div>
+					<div class="dropdown pull-right m-4">
+						<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+							{{selectedImageSize.name}}
+							<span class="caret"></span></button>
+						<ul class="dropdown-menu">
+							<li><a ng-click="selectedImageSize.name = sizes.name; selectedImageSize.key = sizes.key; "
+										 ng-repeat="sizes in imageSizes track by $index">{{sizes.name}}</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+
+
+				<div class="row list-group m-4">
+					<div class="">
+						<div ng-repeat="obj in searchResults track by $index" class="pre-scrollable col-xs-6 col-sm-3">
+							<div class="item">
+								<div class="thumbnail crop-va" ng-click="selectedImageForRemoval(obj,obj[selectedImageSize.key] )"
+										 ng-class=" checkImageSelected(obj) ? 'thumbnail-selected' : 'thumbnail-unselected'">
+									<img class="group list-group-image" src="{{obj[selectedImageSize.key]}}"/>
+
+								</div>
+								<div>
+									<p class="small">&copy; Victoria and Albert Museum, London</p>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+		<!----------------------------------------------- Search Results ------------------------------------------>
+
+
+	</div>
+</div>

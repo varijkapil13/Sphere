@@ -1,0 +1,129 @@
+<div class="page-header">
+	<h2>
+		<span class="fa-stack">
+			<i class="fa fa-file-text-o"></i>
+		</span>Sphere Text Classification
+	</h2>
+</div>
+<div>
+	<ul class="nav nav-tabs">
+		<li><a ng-href="#!/text/datasetCreation"><strong>Add/View Gold Standards</strong></a></li>
+		<li><a ng-href="#!/text/lexicons"><strong>Build/View Feature Extractor</strong></a></li>
+		<li class="active"><a ng-href="#!/text/workflow-generator"><strong>Create Classifier workflow</strong></a></li>
+		<li><a ng-href="#!/text/workflow-viewer"><strong>Search/View Classifiers</strong></a></li>
+		<li><a ng-href="#!/text/workflowannotator"><strong>Data Annotation</strong></a></li>
+
+	</ul>
+	<!------------------------------------------    Modal  ---------------------------------------->
+	<modal-div show='modalShown' width='60%' height='50%'>
+
+		<div ng-show="!edgeSelected">
+			<button class=" btn btn-warning m-2" ng-show="modalData.showRemove " ng-click="removeNode(modalData)">
+				Remove
+				{{modalData.name}}
+			</button>
+
+			<h4>{{modalData.title}}</h4>
+			<div class="pre-scrollable">
+				<button ng-repeat="item in modalData.data track by $index " class="btn btn-primary m-2 "
+								ng-click='addNode(modalData, item)'>{{item}}
+				</button>
+			</div>
+		</div>
+		<div ng-show="edgeSelected">
+			<button class="btn btn-warning m-2" ng-click="removeEdge(edgeID)">Delete Connection</button>
+		</div>
+
+		<div class='modal-footer'>
+			<button class='btn btn-warning' type='button' ng-click='hideModal()'>Cancel</button>
+		</div>
+
+	</modal-div>
+	<!------------------------------------------    Modal  ---------------------------------------->
+
+	<div class="row mt-4" id="createWorkflowTab">
+		<div class="col-md-12">
+			<div class="panel panel-primary">
+
+				<div class="panel-heading">
+					Create a new classifier Worklflow
+				</div>
+				<div class="panel-body">
+
+
+					<div class="row">
+
+
+						<!------------------------------------------    Cytoscape  ---------------------------------------->
+						<div class="m-2 row" ng-show="workflowLibrary.length > 0">
+							<h4 class="m-2">Custom Classifiers</h4>
+							<hr class="m-1">
+							<button class="btn btn-primary m-2" ng-repeat="item in workflowLibrary track by $index"
+											ng-click="addCustomWorkflow(item)"> Add {{item.name}}
+							</button>
+						</div>
+						<div>
+							<h4 class="m-2">Workflow</h4>
+							<hr class="m-1">
+							<button class="btn btn-primary m-2" ng-click="startWorkflow()">Add a Gold Standard</button>
+
+
+							<form class="form-inline" ng-show="!waitingWorkflowLoad" ng-submit="createWorkflow()">
+								<h4 class="m-2">Choose a workflow name</h4>
+								<div id="fieldset" class="m-4 col-xs-12">
+									<label for="wfFieldName"></label>
+									<input type="text" id="wfFieldName" ng-model="wfFieldName" name="wfFieldName"
+												 class=""
+												 placeholder="NER/EA/SA/QA/TD/..."
+												 required>
+									<label for="wfLanguage">_</label>
+									<input type="text" id="wfLanguage" ng-model="wfLanguage" name="wfLanguage"
+												 class=""
+												 placeholder="en/de/fr/..."
+												 required>
+									<label for="wfName">_</label>
+									<input type="text" id="wfName" ng-model="wfName" name="wfName"
+												 class=""
+												 placeholder="Custom Name"
+												 required>
+									<label for="wfVersion">_v</label>
+									<input type="number" id="wfVersion" ng-model="wfVersion" name="wfVersion"
+												 class=""
+												 placeholder="1/1.1/2/..."
+												 required>
+									<button class="btn btn-primary  mr-5 pull-right">Compile
+										Workflow
+									</button>
+
+								</div>
+
+							</form>
+
+
+						</div>
+						<!------------------------------------------    Loading  ---------------------------------------->
+						<div class="row">
+
+							<div class="col-xs-4 col-lg-4 col-xs-offset-4">
+								<div class="alert alert-info" uib-alert role="alert" ng-show="loading">
+									<p>
+										<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i> Loading…
+									</p>
+								</div>
+							</div>
+						</div>
+						<!------------------------------------------    Loading  ---------------------------------------->
+
+
+						<div class="workflow col-xs-12" id="workflowGraphCreation"></div>
+
+
+						<!------------------------------------------    Cytoscape  ---------------------------------------->
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

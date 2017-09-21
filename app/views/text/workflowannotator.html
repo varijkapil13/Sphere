@@ -1,0 +1,307 @@
+<div class="page-header">
+	<h2>
+		<span class="fa-stack">
+			<i class="fa fa-file-text-o"></i>
+		</span>Sphere Text Classification
+	</h2>
+</div>
+<div>
+	<ul class="nav nav-tabs">
+		<li><a ng-href="#!/text/datasetcreation"><strong>Add/View Gold Standards</strong></a></li>
+		<li><a ng-href="#!/text/lexicons"><strong>Build/View Feature Extractor</strong></a></li>
+		<li><a ng-href="#!/text/workflow-generator"><strong>Create Classifier workflow</strong></a></li>
+		<li><a ng-href="#!/text/workflow-viewer"><strong>Search/View Classifiers</strong></a></li>
+		<li class="active"><a ng-href="#!/text/workflowannotator"><strong>Data Annotation</strong></a></li>
+
+	</ul>
+	<!-------------------------------------------- Loading ------------------------------------------------>
+	<div class="row">
+
+		<div class="col-xs-4 col-lg-4 col-xs-offset-4">
+			<div class="alert alert-info" uib-alert role="alert" ng-show="loading">
+				<p>
+					<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i> Loading…
+				</p>
+			</div>
+		</div>
+	</div>
+	<!-------------------------------------------- Loading ------------------------------------------------>
+
+
+	<div class="row mt-4" id="useAnnotated">
+		<div class="col-md-12">
+
+			<!-------------------------------------------- Select workflow ------------------------------------------------>
+			<div class="m-4 row" ng-show="selectingWorkflow">
+				<div class="form-group">
+					<label for="workflowList">Select a Classifier to start Annotations</label>
+					<select class="form-control" id="workflowList" ng-model="selectedClassifier"
+									ng-options="workflow as workflow.name for workflow in classifiers">
+					</select>
+				</div>
+				<button class="btn btn-primary m-2" ng-click="startAnnotation()"> Start Annotations</button>
+
+			</div>
+			<!-------------------------------------------- Select workflow ------------------------------------------------>
+
+			<!-------------------------------------------- Annotated Text ------------------------------------------------>
+			<div class="panel panel-primary" ng-show="!selectingWorkflow">
+
+				<div class="panel-heading">
+					Train Classifier on Annotated Data
+				</div>
+				<div class="panel-body">
+
+					<div class="row container-fluid">
+						<!------------------------------ Upload Buttons ------------------------------>
+						<h5>Extract text from a file</h5>
+						<div class="btn btn-primary mt-4 ml-2 mr-2 mb-2 pull-left" ng-show="!trainOnAnnotations"
+								 ngf-select="uploadFiles($file, $invalidFiles)" ngf-max-size="5MB" ngf-multiple="false"
+								 ngf-allow-dir="false"
+								 accept="text/plain" ngf-patten="'text/plain'">
+							Extract text from a CSV/.txt file
+						</div>
+					</div>
+
+					<!------------------------------ Upload Buttons ------------------------------>
+
+
+					<!------------------------------ Search Bing ------------------------------>
+					<div class="row container-fluid">
+						<h5>Search for text snippets on Bing</h5>
+						<form ng-submit="searchBing(searchText, apiKey)">
+							<div class="m-4">
+								<label for="apiKey">Enter a Bing Search API Key if available (We use a free trial with limited
+									queries)</label>
+								<input type="text" class="form-control" ng-model="apiKey" id="apiKey" title="Bing API key"
+											 placeholder="API Key"/>
+							</div>
+							<div class="m-4">
+								<input class="form-control" ng-model="searchText" id="searchText" title="Search Bing for text"
+											 placeholder="Search Bing for text" required/>
+
+							</div>
+							<button class="btn btn-primary m-4">
+								<i class="fa fa-search"></i> Search
+							</button>
+						</form>
+					</div>
+					<!------------------------------ Search Bing ------------------------------>
+
+					<div class="row">
+
+
+						<!------------------------------ Text Area ------------------------------>
+						<div class="col-xs-12">
+
+							<label for="annotationText"> Type in or upload text below</label>
+
+
+							<textarea textarea-submit="" autofocus="" id="annotationText" name="text"
+												placeholder="Text in which to extract information"
+												class="form-control input-lg ng-pristine ng-empty ng-valid-minlength ng-valid ng-valid-required ng-touched"
+												rows="10" ng-minlength="1" ng-model="textAreaData"> {{textAreaData}}</textarea>
+
+
+						</div>
+						<!------------------------------ Text Area ------------------------------>
+
+
+						<!------------------------------ Checkbox and Line separator ------------------------------>
+						<div class="col-xs-12">
+							<div class="checkbox m-4 col-xs-6 col-sm-6  col-md-4">
+								<label class="m-3"><input type="checkbox" value="" ng-checked="splitAutomatically"
+																					ng-click="splitAutomatically = !splitAutomatically">Split Automatically by
+									detecting a new
+									line(\n) character</label>
+							</div>
+
+							<div class="m-4 col-xs-6 col-sm-6  col-md-7  pull-right form-group form-inline">
+								Line separator:
+
+								<div class="btn-group m-1">
+
+									<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">{{selectedSeparator}} &nbsp;&nbsp;&nbsp;<span
+										class="caret"></span></button>
+									<ul class="dropdown-menu">
+										<li ng-repeat="obj in lineSeparators track by $index">
+											<a ng-click="setSelectedSeparator(obj)">{{obj}}</a>
+										</li>
+									</ul>
+								</div>
+
+								to txt file when a <code>new line (\n)</code> is detected in the text
+							</div>
+
+						</div>
+						<!------------------------------ Checkbox and Line separator ------------------------------>
+
+
+						<!------------------------------ Annotation and CLear all text Button ------------------------------>
+						<button class="btn btn-success m-4 col-xs-4  col-sm-3  col-md-2 pull-left"
+										ng-show="!!selectedClassifier && textAreaData.length > 0"
+										ng-click="trainOnAnnotations? trainOnData() : annotateText()">
+							{{trainOnAnnotations? 'Start Training': 'Annotate'}}
+						</button>
+						<button class="m-4 btn btn-danger col-xs-4  col-sm-3  col-md-2 pull-right" ng-show="!!textAreaData"
+										ng-click="textAreaData = ''; predictionResults = []">Clear All
+						</button>
+
+						<!------------------------------ Annotation and CLear all text Button ------------------------------>
+
+					</div>
+					<div class="row">
+						<button class="m-4 btn btn-primary col-xs-4  col-sm-3  col-md-2 pull-right"
+										ng-show="correctionsArray.length > 0"
+										ng-click="viewCorrectedText()">{{showCorrectedText?'Hide Edited Annotations':'View Edited
+							Annotations'}}
+						</button>
+					</div>
+
+
+				</div>
+			</div>
+			<!-------------------------------------------- Annotated Text ------------------------------------------------>
+			<!-------------------------------------------- Corrected Text ------------------------------------------------>
+			<div class="panel panel-primary" ng-show="showCorrectedText">
+
+				<div class="panel-heading">
+					Corrections and new dataset creation
+				</div>
+				<div class="panel-body">
+
+					<div class="row container-fluid">
+						<!------------------------------ Upload Buttons ------------------------------>
+						<div class="mt-4 ml-2 mr-2 mb-2 pull-left">
+							<div class="btn btn-primary"
+									 ngf-select="uploadFiles($file, $invalidFiles)" ngf-multiple="false"
+									 ngf-allow-dir="false"
+									 accept="text/csv,text/nt,application/nt" ngf-patten="'text/csv,text/nt,application/nt'">
+								From a CSV File...
+							</div>
+						</div>
+						<!------------------------------ Upload Buttons ---------------------------------------------------->
+					</div>
+
+					<div class="row">
+
+
+						<!------------------------------ Text Area --------------------------------------------------------->
+						<form
+							ng-submit="saveAnnotatedData(dsFieldName + '_' + dsLanguage+ '_' + dsSource + '_' + dsName + '_v' + dsVersion, annotatedTextArea, dsLanguage, annotatedTextDescription)">
+							<div class="col-xs-12">
+
+								<label for="annotatedText"> Type in or upload text below</label>
+
+
+								<textarea textarea-submit="" autofocus="" id="annotatedText" name="text"
+													placeholder="Text in which to extract information"
+													class="form-control input-lg ng-pristine ng-empty ng-valid-minlength ng-valid ng-valid-required ng-touched"
+													rows="10" ng-minlength="1" ng-model="annotatedTextArea"
+													required> {{annotatedTextArea}}</textarea>
+							</div>
+							<div class="col-xs-12 mt-3">
+
+								<label for="annotatedTextDescription"> Type in or upload text below</label>
+
+
+								<textarea textarea-submit="" autofocus="" id="annotatedTextDescription" name="annotatedTextDescription"
+													placeholder="Add a description for the annotated text"
+													class="form-control input-lg ng-pristine ng-empty ng-valid-minlength ng-valid ng-valid-required ng-touched"
+													rows="3" ng-minlength="1" ng-model="annotatedTextDescription" required> </textarea>
+							</div>
+							<!------------------------------ Text Area --------------------------------------------------------->
+
+							<!------------------------------ Annotation and Clear all text Button ------------------------------>
+
+							<div id="fieldset" class="m-4 col-xs-12">
+								<label for="dsFieldName"></label>
+								<input type="text" id="dsFieldName" ng-model="dsFieldName" name="dsFieldName"
+											 class=""
+											 placeholder="NER/EA/SA/QA/TD/..."
+											 required>
+								<label for="dsLanguage">_</label>
+								<input type="text" id="dsLanguage" ng-model="dsLanguage" name="dsLanguage"
+											 class=""
+											 placeholder="en/de/fr/..."
+											 required>
+								<label for="dsSource">_</label>
+								<input type="text" id="dsSource" ng-model="dsSource" name="dsSource"
+											 class=""
+											 placeholder="Stanford/..."
+											 required>
+								<label for="dsName">_</label>
+								<input type="text" id="dsName" ng-model="dsName" name="dsName"
+											 class=""
+											 placeholder="Custom Name"
+											 required>
+								<label for="dsVersion">_v</label>
+								<input type="number" id="dsVersion" ng-model="dsVersion" name="dsVersion"
+											 class=""
+											 placeholder="1/1.1/2/..."
+											 required>
+							</div>
+							<button class="m-4 btn btn-success col-xs-4  col-sm-3  col-md-2 pull-left" ng-show="!!annotatedTextArea">
+								Save Dataset
+							</button>
+							<button type="button" class="m-4 btn btn-danger col-xs-4  col-sm-3  col-md-2 pull-right"
+											ng-show="!!annotatedTextArea"
+											ng-click="annotatedTextArea = ''">Clear All
+							</button>
+						</form>
+
+						<!------------------------------ Annotation and Clear all text Button ------------------------------>
+
+					</div>
+
+
+				</div>
+			</div>
+			<!--------------------------------------- Corrected Text ------------------------------------------------>
+
+			<!--------------------------------------- Annotated Text Results ------------------------------------------------>
+			<div class="panel panel-success" ng-show="predictionResults.length > 0">
+				<div class="panel-heading">
+					Annotation Results
+				</div>
+				<div class="panel-body">
+					<button class="btn btn-success" ng-click="downloadAnnotationsAsCSV()">Download as CSV</button>
+					<table class="table table-responsive table-hover">
+						<thead>
+						<tr>
+							<th>Nr</th>
+							<th>Text</th>
+							<th>Prediction</th>
+							<th>Correction</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr ng-repeat="predictionText in predictionResults track by $index">
+							<td><p class="m-1 "><strong>{{$index + 1}} </strong></p></td>
+							<td>
+								<p class="m-1">{{predictionText.text}}</p>
+							</td>
+							<td>
+								<p class="m-1 ">{{predictionText.prediction}}</p>
+							</td>
+							<td>
+								<div class="input-group">
+									<span class="input-group-addon" id="basic-addon1"><i class="fa fa-pencil-square-o"
+																																			 aria-hidden="true"></i></span>
+									<input class="form-control" type="text" ng-model="correctPrediction"
+												 title="correctPrediction" placeholder="Enter Text and press Enter"
+												 enter-pressed="addCorrection(predictionText.text,correctPrediction)">
+								</div>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<!--------------------------------------- Annotated Text Results ------------------------------------------------>
+		</div>
+	</div>
+
+
+</div>
+<!-- what are you doing?  || I like to stay here || I hate bicycles || I like animals  -->

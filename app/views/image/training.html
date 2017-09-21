@@ -1,0 +1,73 @@
+<div class="page-header">
+	<h2>
+		<span class="fa-stack">
+<i class="fa fa-picture-o"></i>
+</span>Sphere Image Classification
+	</h2>
+</div>
+
+<!----------------------------------------------- Loading Panel ------------------------------------------>
+<div class="col-xs-4 col-lg-4 col-xs-offset-4">
+	<div class="alert alert-info" uib-alert role="alert" ng-show="loading">
+		<p>
+			<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i> Loading…
+		</p>
+	</div>
+</div>
+<!----------------------------------------------- Loading Panel ------------------------------------------>
+
+<div class="col-xs-12">
+	<ul class="nav nav-tabs">
+		<li><a ng-href="#!/image/search">Search/Upload Images</a></li>
+		<li class="active"><a ng-href="#!/image/training">Train a Model</a></li>
+		<li><a ng-href="#!/image/validation">View Models</a></li>
+		<li><a ng-href="#!/image/predictions">Predictions</a></li>
+	</ul>
+</div>
+<div class="row">
+
+	<div class="col-md-12">
+		<!----------------------------------------------- Main Panel ------------------------------------------>
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				Start Model training
+			</div>
+			<div class="panel-body">
+				<form id="startTrainingForm" ng-submit="startTraining(selectedDatasets,selectedModel, modelName)">
+					<!-------------------------------------------- Select datasets ------------------------------------------------>
+					<div class="m-4 row">
+						<div class="form-group">
+							<label for="datasetList">Select image dataset</label>
+							<select class="form-control" id="datasetList" ng-model="selectedDatasets"
+											ng-options="imageDataset as imageDataset.name for imageDataset in availableImageDatasets | orderBy:'name'">
+							</select>
+						</div>
+
+					</div>
+					<!-------------------------------------------- Select datasets ------------------------------------------------>
+					<!-------------------------------------------- Select Model ------------------------------------------------>
+					<div class="m-4 row" ng-show="selectedDatasets">
+						<div class="form-group">
+							<label for="modelList">Select a model to start training</label>
+							<select class="form-control" id="modelList" ng-model="selectedModel"
+											ng-options="models as models.name for models in availableModels| orderBy:'name'">
+							</select>
+						</div>
+
+					</div>
+					<!-------------------------------------------- Select Model ------------------------------------------------>
+					<div class="m-4 row" ng-show="selectedModel">
+						<label for="modelName">Enter a model Name</label>
+						<input id="modelName" class="form-control" placeholder="Model Name" ng-model="modelName" required>
+					</div>
+					<button role="button" type="submit" class="btn btn-primary m-4" ng-show="modelName">Start Training
+					</button>
+				</form>
+			</div>
+
+		</div>
+		<!----------------------------------------------- Main Panel ------------------------------------------>
+
+
+	</div>
+</div>

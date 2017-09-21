@@ -1,0 +1,129 @@
+<div class="page-header">
+	<h2>
+		<span class="fa-stack">
+<i class="fa fa-picture-o"></i>
+</span>Sphere Image Classification
+	</h2>
+</div>
+
+<div>
+	<ul class="nav nav-tabs">
+		<li><a ng-href="#!/image/search">Search/Upload Images</a></li>
+		<li><a ng-href="#!/image/training">Train a Model</a></li>
+		<li class="active"><a ng-href="#!/image/validation">View Models</a></li>
+		<li><a ng-href="#!/image/predictions">Predictions</a></li>
+	</ul>
+</div>
+<div class="row">
+
+	<div class="col-md-12">
+		<div class="panel panel-primary">
+
+			<div class="panel-heading">
+				Below is the list of models that are already trained, or are being trained.
+			</div>
+			<div class="panel-body">
+				<div class="col-xs-4 col-lg-4 col-xs-offset-4">
+					<div class="alert alert-info" uib-alert role="alert" ng-show="loading">
+						<p>
+							<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i> Loading…
+						</p>
+					</div>
+				</div>
+
+				<div ng-show="modelList.length <= 0" class="row container-fluid">
+					<h4 class="col-xs-12">No models found in the database.</h4>
+				</div>
+				<div class="m-4 form-horizontal" ng-show="modelList.length > 0">
+					<input class="form-control" placeholder="Search Models" ng-model="modelSearch">
+				</div>
+
+				<table class="table table-responsive table-hover" ng-show="modelList.length > 0">
+					<thead>
+					<tr>
+						<th>Nr</th>
+						<th>Model Name</th>
+						<th>Trained Items</th>
+						<th>Download Model</th>
+						<th>Download Weights</th>
+						<th>Validation</th>
+						<th>Validation Results</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr ng-repeat="items in modelList | filter: modelSearch | orderBy:'model_save_name' track by $index">
+						<td>{{$index + 1}}</td>
+						<td>
+							<p>{{items.model_save_name}}</p>
+						</td>
+						<td>
+							<p>{{items.model_search_terms}}</p>
+						</td>
+						<td>
+							<div ng-show="hasJSON(items.model_json)">
+								<button class="btn btn-success m-1" ng-click="showJSONForModel(items.model_json)">JSON</button>
+								<button class="btn btn-primary"
+												ng-click="downloadModels(items.model_file_link, items.model_save_name + '__model_file')">.H5
+									file
+								</button>
+							</div>
+							<div ng-show="!hasJSON(items.model_json)">
+								<button class="btn disabled m-1">N/A</button>
+							</div>
+
+						</td>
+						<td>
+							<div ng-show="hasJSON(items.model_json)">
+								<button class="btn btn-primary m-1"
+												ng-click="downloadModels(items.model_weights_file_link, items.model_save_name + '__weights_file')">
+									.H5 file
+								</button>
+							</div>
+							<div ng-show="!hasJSON(items.model_json)">
+								<button class="btn disabled m-1">N/A</button>
+							</div>
+						</td>
+						<td>
+							<div ng-show="canValidate(items.model_validation_status)">
+								<button class="btn btn-primary m-1" ng-click="startValidation(items.model_base_name, items.model_hash)">
+									Validate
+								</button>
+							</div>
+							<div ng-show="!canValidate(items.model_validation_status)">
+								<button class="btn disabled m-1">{{validationStatus}}</button>
+							</div>
+						</td>
+						<td>
+							<div ng-show="isValidated(items.model_validation_acc_loss)">
+								<button class="btn m-1">{{items.model_validation_acc_loss}}</button>
+							</div>
+							<div ng-show="!isValidated(items.model_validation_acc_loss)">
+								<button class="btn disabled m-1">Not yet Validated</button>
+							</div>
+						</td>
+
+					</tr>
+					</tbody>
+				</table>
+
+
+			</div>
+		</div>
+		<!----------------------------------------------- SHOW JSON DATA ------------------------------------------------->
+		<div class="panel panel-default" ng-show="jsonModelData.length > 0">
+			<div class="panel-heading">
+				JSON Representation of the Model
+			</div>
+			<div class="panel-body">
+				<div id="showModelJSON">
+					<div class="btn btn-primary m-2" ng-click="jsonModelData = ''">Hide Panel</div>
+					<code class="col-xs-12 m-2" ng-bind-html="jsonModelData | prettify">
+
+					</code>
+				</div>
+			</div>
+		</div>
+		<!----------------------------------------------- SHOW JSON DATA ------------------------------------------------->
+	</div>
+</div>
+

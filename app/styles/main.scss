@@ -1,0 +1,724 @@
+$icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
+$fa-font-path: "../bower_components/font-awesome/fonts";
+// custom colors
+$brand-primary: #3972dd;
+$brand-danger: #ff1802;
+$brand-warning: hsl(47, 66%, 51%);
+$brand-info: #68cce3;
+$brand-success: hsla(120, 65%, 35%, 1);
+$navbar-default-color: #bbdefb;
+$navbar-default-bg: $brand-primary;
+$navbar-default-link-color: #f5f5f5;
+$navbar-default-link-active-bg: #02008f;
+$navbar-default-link-active-color: #f5f5f5;
+$navbar-default-link-hover-bg: $navbar-default-link-active-bg;
+$navbar-default-link-hover-color: $navbar-default-link-active-color;
+$body-bg: #f5f5f5;
+$text-color: #212121;
+$page-header-border-color: $brand-primary;
+$headings-color: $brand-primary;
+// fonts
+@import url('https://fonts.googleapis.com/css?family=Lato');
+$font-family-base: "Lato", sans-serif;
+$font-family-serif: "Lato", sans-serif;
+$font-family-sans-serif: "Lato", sans-serif;
+$font-family-monospace: "Lato", sans-serif;
+$headings-font-family: "Lato", sans-serif;
+// bower:scss
+@import '../../bower_components/bootstrap-sass-official/assets/stylesheets/_bootstrap.scss';
+@import '../../bower_components/font-awesome/scss/font-awesome.scss';
+// endbower
+// from bootstrap 4 (responsive images inside containers)
+.img-fluid {
+	max-width: 100%;
+	height: auto;
+}
+
+.breakword {
+	white-space: pre-wrap;
+	word-wrap: break-word;
+}
+
+/* Sticky footer */
+
+html {
+	position: relative;
+	min-height: 90%;
+}
+
+body {
+	/* Margin bottom by footer height */
+	margin-bottom: 60px;
+}
+
+.footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	/* Set the fixed height */
+	height: 60px;
+	background-color: #f5f5f5;
+}
+
+.nav-root {
+	font-variant: small-caps;
+}
+
+/* -------------------------------------------------- */
+
+/* Change font to monospace */
+
+.monospaced {
+	font-family: $font-family-monospace;
+}
+
+/* add margin bottom to each row */
+
+.row {
+	//noinspection SassScssResolvedByNameOnly
+	margin-bottom: $line-height-computed;
+}
+
+/* image in navbar */
+
+.navbar-brand {
+	padding: 0;
+
+	img {
+		height: 100%;
+		width: auto;
+	}
+}
+
+/* file upload */
+
+.drop-box {
+	background: #F8F8F8;
+	border: 5px dashed #DDD;
+	width: auto;
+	height: 8em;
+	text-align: center;
+	padding-top: 25px;
+	margin: 10px;
+}
+
+.dragover {
+	border: 5px dashed $brand-primary;
+}
+
+/*------------------------------------------------------------------ sphere -----------------------------------------------------------------------------*/
+/*----------------------------------------- sphere Images ----------------------------------------------------*/
+
+/* Thumbnail creation and image border for image searches*/
+
+.thumbnail-image {
+	position: relative;
+	float: left;
+	width: 100px;
+	height: 100px;
+	background: no-repeat 50% 50%;
+	background-size: cover;
+}
+
+@media (max-width: 320px) {
+	.crop {
+		height: 120px;
+		width: 120px;
+		overflow: hidden;
+	}
+
+	.crop img {
+		height: auto;
+		width: 120px;
+	}
+
+	.crop-va {
+		height: 160px;
+		width: 160px;
+		overflow: hidden;
+	}
+
+	.crop-va img {
+		height: auto;
+		width: 160px;
+	}
+}
+
+@media (min-width: 768px) {
+	.crop {
+		height: 160px;
+		width: 160px;
+		overflow: hidden;
+	}
+
+	.crop img {
+		height: auto;
+		width: 160px;
+	}
+
+	.crop-va {
+		height: 200px;
+		width: 200px;
+		overflow: hidden;
+	}
+
+	.crop-va img {
+		height: auto;
+		width: 200px;
+	}
+}
+
+.thumbnail-selected {
+	border: 4px solid #ff1802;
+}
+
+.thumbnail-unselected {
+	border: 4px solid #FFFFFF;
+}
+
+/*----------------------------------------- sphere Text ----------------------------------------------------*/
+.remove-sphere {
+	background: #C76868;
+	color: #C76868;
+	font-weight: bold;
+	font-size: 31px;
+	border: 0;
+	cursor: pointer;
+	display: inline-block;
+	padding: 4px 9px;
+	vertical-align: top;
+	line-height: 100%;
+}
+
+.node {
+	cursor: pointer;
+}
+
+.node circle {
+	fill: #62bdff;
+	stroke: steelblue;
+	stroke-width: 1.8px;
+}
+
+.node text {
+	font: 12px sans-serif;
+}
+
+.link {
+	fill: none;
+	stroke: white;
+	stroke-width: 4px;
+}
+
+.ng-modal-overlay {
+	/* A dark translucent div that covers the whole screen */
+	position: absolute;
+	z-index: 9999;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #000000;
+	opacity: 0.6;
+}
+
+.ng-modal-dialog {
+	/* A centered div above the overlay with a box shadow. */
+	z-index: 10000;
+	position: absolute;
+	width: 50%; /* Default */
+
+	/* Center the dialog */
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	-webkit-transform: translate(-50%, -50%);
+	-moz-transform: translate(-50%, -50%);
+
+	background-color: #fff;
+	box-shadow: 4px 4px 80px #000;
+}
+
+.ng-modal-dialog-content {
+	padding: 10px;
+	text-align: left;
+}
+
+line {
+	stroke: black;
+	stroke-width: 3px;
+	stroke-linecap: round;
+}
+
+.workflow {
+	background-color: rgba(162, 197, 209, 0.55);
+	min-height: 600px;
+	min-width: 1000px;
+	position: relative;
+}
+
+code {
+	outline: 1px solid #ccc;
+	padding: 5px;
+	margin: 5px;
+}
+
+.string {
+	color: green;
+}
+
+.number {
+	color: darkorange;
+}
+
+.boolean {
+	color: blue;
+}
+
+.null {
+	color: magenta;
+}
+
+.key {
+	color: red;
+}
+
+a.info:hover {
+	text-decoration: none !important;
+}
+
+pre.sphere {
+	white-space: pre-wrap; /* Since CSS 2.1 */
+	white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+	white-space: -o-pre-wrap; /* Opera 7 */
+	word-wrap: break-word; /* Internet Explorer 5.5+ */
+}
+
+.btn-file-sphere {
+	position: relative;
+	overflow: hidden;
+}
+
+.btn-file-sphere input[type=file] {
+	position: absolute;
+	top: 0;
+	right: 0;
+	min-width: 100%;
+	min-height: 100%;
+	font-size: 100px;
+	text-align: right;
+	filter: alpha(opacity=0);
+	opacity: 0;
+	outline: none;
+	background: white;
+	cursor: inherit;
+	display: block;
+}
+
+#fieldset {
+	font-size: 1em;
+	padding: 0.5em;
+	border-radius: 1em;
+	font-family: sans-serif;
+}
+
+#fieldset label, input[type="button"] {
+	font-size: inherit;
+	padding: 0.2em;
+	margin: 0.1em 0.2em;
+	-moz-box-sizing: content-box;
+	-webkit-box-sizing: content-box;
+	box-sizing: content-box;
+}
+
+/* Bootstrap 4 margin and padding classes */
+
+.m-0 {
+	margin: 0 0 !important
+}
+
+.mt-0 {
+	margin-top: 0 !important
+}
+
+.mr-0 {
+	margin-right: 0 !important
+}
+
+.mb-0 {
+	margin-bottom: 0 !important
+}
+
+.ml-0 {
+	margin-left: 0 !important
+}
+
+.mx-0 {
+	margin-right: 0 !important;
+	margin-left: 0 !important
+}
+
+.my-0 {
+	margin-top: 0 !important;
+	margin-bottom: 0 !important
+}
+
+.m-1 {
+	margin: .25rem .25rem !important
+}
+
+.mt-1 {
+	margin-top: .25rem !important
+}
+
+.mr-1 {
+	margin-right: .25rem !important
+}
+
+.mb-1 {
+	margin-bottom: .25rem !important
+}
+
+.ml-1 {
+	margin-left: .25rem !important
+}
+
+.mx-1 {
+	margin-right: .25rem !important;
+	margin-left: .25rem !important
+}
+
+.my-1 {
+	margin-top: .25rem !important;
+	margin-bottom: .25rem !important
+}
+
+.m-2 {
+	margin: .5rem .5rem !important
+}
+
+.mt-2 {
+	margin-top: .5rem !important
+}
+
+.mr-2 {
+	margin-right: .5rem !important
+}
+
+.mb-2 {
+	margin-bottom: .5rem !important
+}
+
+.ml-2 {
+	margin-left: .5rem !important
+}
+
+.mx-2 {
+	margin-right: .5rem !important;
+	margin-left: .5rem !important
+}
+
+.my-2 {
+	margin-top: .5rem !important;
+	margin-bottom: .5rem !important
+}
+
+.m-3 {
+	margin: 1rem 1rem !important
+}
+
+.mt-3 {
+	margin-top: 1rem !important
+}
+
+.mr-3 {
+	margin-right: 1rem !important
+}
+
+.mb-3 {
+	margin-bottom: 1rem !important
+}
+
+.ml-3 {
+	margin-left: 1rem !important
+}
+
+.mx-3 {
+	margin-right: 1rem !important;
+	margin-left: 1rem !important
+}
+
+.my-3 {
+	margin-top: 1rem !important;
+	margin-bottom: 1rem !important
+}
+
+.m-4 {
+	margin: 1.5rem 1.5rem !important
+}
+
+.mt-4 {
+	margin-top: 1.5rem !important
+}
+
+.mr-4 {
+	margin-right: 1.5rem !important
+}
+
+.mb-4 {
+	margin-bottom: 1.5rem !important
+}
+
+.ml-4 {
+	margin-left: 1.5rem !important
+}
+
+.mx-4 {
+	margin-right: 1.5rem !important;
+	margin-left: 1.5rem !important
+}
+
+.my-4 {
+	margin-top: 1.5rem !important;
+	margin-bottom: 1.5rem !important
+}
+
+.m-5 {
+	margin: 3rem 3rem !important
+}
+
+.mt-5 {
+	margin-top: 3rem !important
+}
+
+.mr-5 {
+	margin-right: 3rem !important
+}
+
+.mb-5 {
+	margin-bottom: 3rem !important
+}
+
+.ml-5 {
+	margin-left: 3rem !important
+}
+
+.mx-5 {
+	margin-right: 3rem !important;
+	margin-left: 3rem !important
+}
+
+.my-5 {
+	margin-top: 3rem !important;
+	margin-bottom: 3rem !important
+}
+
+.p-0 {
+	padding: 0 0 !important
+}
+
+.pt-0 {
+	padding-top: 0 !important
+}
+
+.pr-0 {
+	padding-right: 0 !important
+}
+
+.pb-0 {
+	padding-bottom: 0 !important
+}
+
+.pl-0 {
+	padding-left: 0 !important
+}
+
+.px-0 {
+	padding-right: 0 !important;
+	padding-left: 0 !important
+}
+
+.py-0 {
+	padding-top: 0 !important;
+	padding-bottom: 0 !important
+}
+
+.p-1 {
+	padding: .25rem .25rem !important
+}
+
+.pt-1 {
+	padding-top: .25rem !important
+}
+
+.pr-1 {
+	padding-right: .25rem !important
+}
+
+.pb-1 {
+	padding-bottom: .25rem !important
+}
+
+.pl-1 {
+	padding-left: .25rem !important
+}
+
+.px-1 {
+	padding-right: .25rem !important;
+	padding-left: .25rem !important
+}
+
+.py-1 {
+	padding-top: .25rem !important;
+	padding-bottom: .25rem !important
+}
+
+.p-2 {
+	padding: .5rem .5rem !important
+}
+
+.pt-2 {
+	padding-top: .5rem !important
+}
+
+.pr-2 {
+	padding-right: .5rem !important
+}
+
+.pb-2 {
+	padding-bottom: .5rem !important
+}
+
+.pl-2 {
+	padding-left: .5rem !important
+}
+
+.px-2 {
+	padding-right: .5rem !important;
+	padding-left: .5rem !important
+}
+
+.py-2 {
+	padding-top: .5rem !important;
+	padding-bottom: .5rem !important
+}
+
+.p-3 {
+	padding: 1rem 1rem !important
+}
+
+.pt-3 {
+	padding-top: 1rem !important
+}
+
+.pr-3 {
+	padding-right: 1rem !important
+}
+
+.pb-3 {
+	padding-bottom: 1rem !important
+}
+
+.pl-3 {
+	padding-left: 1rem !important
+}
+
+.px-3 {
+	padding-right: 1rem !important;
+	padding-left: 1rem !important
+}
+
+.py-3 {
+	padding-top: 1rem !important;
+	padding-bottom: 1rem !important
+}
+
+.p-4 {
+	padding: 1.5rem 1.5rem !important
+}
+
+.pt-4 {
+	padding-top: 1.5rem !important
+}
+
+.pr-4 {
+	padding-right: 1.5rem !important
+}
+
+.pb-4 {
+	padding-bottom: 1.5rem !important
+}
+
+.pl-4 {
+	padding-left: 1.5rem !important
+}
+
+.px-4 {
+	padding-right: 1.5rem !important;
+	padding-left: 1.5rem !important
+}
+
+.py-4 {
+	padding-top: 1.5rem !important;
+	padding-bottom: 1.5rem !important
+}
+
+.p-5 {
+	padding: 3rem 3rem !important
+}
+
+.pt-5 {
+	padding-top: 3rem !important
+}
+
+.pr-5 {
+	padding-right: 3rem !important
+}
+
+.pb-5 {
+	padding-bottom: 3rem !important
+}
+
+.pl-5 {
+	padding-left: 3rem !important
+}
+
+.px-5 {
+	padding-right: 3rem !important;
+	padding-left: 3rem !important
+}
+
+.py-5 {
+	padding-top: 3rem !important;
+	padding-bottom: 3rem !important
+}
+
+.m-auto {
+	margin: auto !important
+}
+
+.mt-auto {
+	margin-top: auto !important
+}
+
+.mr-auto {
+	margin-right: auto !important
+}
+
+.mb-auto {
+	margin-bottom: auto !important
+}
+
+.ml-auto {
+	margin-left: auto !important
+}
+
+.mx-auto {
+	margin-right: auto !important;
+	margin-left: auto !important
+}
+
+.my-auto {
+	margin-top: auto !important;
+	margin-bottom: auto !important
+}

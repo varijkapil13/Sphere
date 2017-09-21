@@ -1,0 +1,63 @@
+/*
+Error: File to import not found or unreadable: ../../bower_componentsfont-awesome/scss/font-awesome.scss.
+        on line 29 of main.scss
+
+24: $font-family-sans-serif: "Lato", sans-serif;
+25: $font-family-monospace: "Lato", sans-serif;
+26: $headings-font-family: "Lato", sans-serif;
+27: // bower:scss
+28: @import '../../bower_components/bootstrap-sass-official/assets/stylesheets/_bootstrap.scss';
+29: @import '../../bower_componentsfont-awesome/scss/font-awesome.scss';
+30: // endbower
+31: // from bootstrap 4 (responsive images inside containers)
+32: .img-fluid {
+33: 	max-width: 100%;
+34: 	height: auto;
+
+Backtrace:
+main.scss:29
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/tree/import_node.rb:67:in `rescue in import'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/tree/import_node.rb:45:in `import'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/tree/import_node.rb:28:in `imported_file'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/tree/import_node.rb:37:in `css_import?'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/tree/visitors/perform.rb:313:in `visit_import'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/tree/visitors/base.rb:36:in `visit'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/tree/visitors/perform.rb:160:in `block in visit'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/stack.rb:79:in `block in with_base'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/stack.rb:115:in `with_frame'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/stack.rb:79:in `with_base'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/tree/visitors/perform.rb:160:in `visit'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/tree/visitors/base.rb:52:in `block in visit_children'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/tree/visitors/base.rb:52:in `map'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/tree/visitors/base.rb:52:in `visit_children'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/tree/visitors/perform.rb:169:in `block in visit_children'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/tree/visitors/perform.rb:181:in `with_environment'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/tree/visitors/perform.rb:168:in `visit_children'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/tree/visitors/base.rb:36:in `block in visit'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/tree/visitors/perform.rb:188:in `visit_root'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/tree/visitors/base.rb:36:in `visit'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/tree/visitors/perform.rb:159:in `visit'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/tree/visitors/perform.rb:8:in `visit'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/tree/root_node.rb:36:in `css_tree'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/tree/root_node.rb:29:in `render_with_sourcemap'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/engine.rb:381:in `_render_with_sourcemap'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/engine.rb:298:in `render_with_sourcemap'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/plugin/compiler.rb:492:in `update_stylesheet'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/plugin/compiler.rb:215:in `block in update_stylesheets'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/plugin/compiler.rb:209:in `each'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/plugin/compiler.rb:209:in `update_stylesheets'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/plugin.rb:82:in `update_stylesheets'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/exec/sass_scss.rb:340:in `watch_or_update'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/exec/sass_scss.rb:51:in `process_result'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/exec/base.rb:52:in `parse'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/lib/sass/exec/base.rb:19:in `parse!'
+/Users/varij/.rvm/gems/ruby-2.2.4/gems/sass-3.4.23/bin/scss:13:in `<top (required)>'
+/Users/varij/.rvm/gems/ruby-2.2.4/bin/scss:23:in `load'
+/Users/varij/.rvm/gems/ruby-2.2.4/bin/scss:23:in `<main>'
+/Users/varij/.rvm/gems/ruby-2.2.4/bin/ruby_executable_hooks:15:in `eval'
+/Users/varij/.rvm/gems/ruby-2.2.4/bin/ruby_executable_hooks:15:in `<main>'
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Error: File to import not found or unreadable: ../../bower_componentsfont-awesome/scss/font-awesome.scss.\A         on line 29 of main.scss\A \A 24: $font-family-sans-serif: \"Lato\", sans-serif;\A 25: $font-family-monospace: \"Lato\", sans-serif;\A 26: $headings-font-family: \"Lato\", sans-serif;\A 27: // bower:scss\A 28: @import '../../bower_components/bootstrap-sass-official/assets/stylesheets/_bootstrap.scss';\A 29: @import '../../bower_componentsfont-awesome/scss/font-awesome.scss';\A 30: // endbower\A 31: // from bootstrap 4 (responsive images inside containers)\A 32: .img-fluid {\A 33: 	max-width: 100%;\A 34: 	height: auto;"; }

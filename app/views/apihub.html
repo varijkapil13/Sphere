@@ -1,0 +1,88 @@
+<div class="page-header">
+	<h2>
+		<span class="fa-stack">
+			<i class="fa fa-sitemap"></i>
+		</span>Sphere API Hub
+	</h2>
+</div>
+<div class="col-xs-12 mb-4">
+	<ul class="nav nav-tabs">
+		<li ng-class="{'active': showingImages == false }"><a ng-click="showingImages = false">Text</a></li>
+		<li ng-class="{'active': showingImages == true }"><a ng-click="showingImages = true">Image</a></li>
+	</ul>
+</div>
+
+
+<div class="col-xs-4 col-lg-4 col-xs-offset-4">
+	<div class="alert alert-info" uib-alert role="alert" ng-show="loading">
+		<p>
+			<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i> Loading…
+		</p>
+	</div>
+</div>
+<div class="col-md-12">
+	<!-------------------------------------------- Text Prediction API ---------------------------------------------------->
+	<div ng-show="!showingImages">
+		<div class="row m-4">
+			<div class="col-sm-12">
+				<input class="form-control" ng-model="keyword" placeholder="Search a Classifier"/>
+			</div>
+		</div>
+		<api-info></api-info>
+
+
+		<div class="row" id="mainView">
+			<div class="col-xs-6 col-md-4" ng-repeat="classifier in classifiers  | filter:keyword track by $index">
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						<strong>{{classifier.name}} </strong>
+					</div>
+					<div class="panel-body">
+						<p class="m-2"><strong> API url: </strong></p>
+
+						<pre class="sphere">{{textApiMainUrl + classifier.name +endUrl}}</pre>
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-------------------------------------------- Text Prediction API ---------------------------------------------------->
+	<!-------------------------------------------- Image Prediction API --------------------------------------------------->
+	<div ng-show="showingImages" class="row">
+
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				Predition API for Images
+			</div>
+			<div class="panel-body">
+				<div class="col-xs-12">
+
+					<div class="col-xs-6 col-md-3"><strong>Method</strong></div>
+					<div class="col-xs-6 col-md-9">
+						<pre> POST </pre>
+					</div>
+					<div class="col-xs-6 col-md-3"><strong> Request URI</strong></div>
+					<div class="col-xs-6 col-md-9">
+						<pre ng-bind-html="imageApiMainUrl | json"></pre>
+					</div>
+					<div class="col-xs-6 col-md-3"><strong> Headers</strong></div>
+					<div class="col-xs-6 col-md-9">
+						<pre ng-bind-html="imagePredictionHeaders | json"></pre>
+					</div>
+					<div class="col-xs-6 col-md-3"><strong> Request JSON</strong></div>
+					<div class="col-xs-6 col-md-9">
+						<pre ng-bind-html="imagePredictionRequest | json"></pre>
+					</div>
+					<div class="col-xs-6 col-md-3"><strong> Response:</strong></div>
+					<div class="col-xs-6 col-md-9">
+						<pre ng-bind-html="imagePredictionResponse | json"></pre>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<!-------------------------------------------- Image Prediction API --------------------------------------------------->
+</div>
