@@ -91,7 +91,8 @@
 							<th>Nr</th>
 							<th>Workflow Name</th>
 							<th>Training</th>
-							<th>Validation</th>
+              <th>Deploy</th>
+							<th>Predict</th>
 							<th>Validation Results</th>
 						</tr>
 						</thead>
@@ -110,6 +111,10 @@
 												ng-show="items.status == 'trained'"> Add to classifier library
 								</button>
 							</td>
+              <td>
+                <button class="btn btn-primary m-1"> Export to Docker
+								</button>
+              </td>
 							<td>
 
 								<input ng-show="items.status == 'trained'" class="form-control" placeholder="Enter text to start prediction"

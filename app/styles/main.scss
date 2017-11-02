@@ -26,8 +26,8 @@ $font-family-monospace: "Lato", sans-serif;
 $headings-font-family: "Lato", sans-serif;
 
 // bower:scss
-@import '../../bower_components/bootstrap-sass-official/assets/stylesheets/_bootstrap.scss';
-@import '../../bower_components/font-awesome/scss/font-awesome.scss';
+@import 'bootstrap-sass-official/assets/stylesheets/_bootstrap.scss';
+@import 'font-awesome/scss/font-awesome.scss';
 // endbower
 // from bootstrap 4 (responsive images inside containers)
 .img-fluid {
@@ -252,10 +252,11 @@ line {
 }
 
 .workflow {
-	background-color: rgba(162, 197, 209, 0.55);
+	background-color: rgb(174, 233, 255);
 	min-height: 600px;
-	min-width: 1000px;
+
 	position: relative;
+  border: solid 1px grey;
 }
 
 code {
